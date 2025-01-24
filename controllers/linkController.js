@@ -16,7 +16,7 @@ exports.getLink = (req, res) => {
   const link = links.find((link) => link.shortCode === req.params.shortCode);
 
   if (!link) {
-    res.status(404).json({
+    return res.status(404).json({
       status: 'fail',
       message: `Link with short code "${req.params.shortCode}" does not exist.`,
     });
@@ -28,4 +28,17 @@ exports.getLink = (req, res) => {
       link,
     },
   });
+};
+
+exports.goToLink = (req, res) => {
+  const link = links.find((link) => link.shortCode === req.params.shortCode);
+
+  if (!link) {
+    return res.status(404).json({
+      status: 'fail',
+      message: `Link with short code "${req.params.shortCode}" does not exist.`,
+    });
+  }
+
+  res.redirect(link.url);
 };
