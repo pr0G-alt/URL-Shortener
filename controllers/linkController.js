@@ -181,3 +181,30 @@ exports.updateLink = (req, res) => {
     resError('Something went wrong.', 500, res);
   }
 };
+
+exports.deleteLink = (req, res) => {
+  const link = links.find(
+    (link) => link.shortCode === req.params.shortCode.toLowerCase()
+  );
+
+  if (!link) {
+    return resError(
+      `Link with short code "${req.params.shortCode}" does not exist.`,
+      404,
+      res
+    );
+  }
+
+  try {
+    fs.writeFileSync(
+      `${__dirname}/../data/data.json`,
+      JSON.stringify(links.filter((l) => l !== link))
+    );
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    });
+  } catch (err) {
+    resError('Something went wrong.', 500, res);
+  }
+};
