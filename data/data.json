@@ -1,0 +1,23 @@
+[
+  {
+    "id": 0,
+    "url": "https://www.google.com/",
+    "shortCode": "google",
+    "createdAt": "2025-01-24T13:12:34.951Z",
+    "updatedAt": "2025-01-24T13:12:34.951Z"
+  },
+  {
+    "id": 1,
+    "url": "https://www.linkedin.com/",
+    "shortCode": "linkedin",
+    "createdAt": "2025-01-24T13:14:16.595Z",
+    "updatedAt": "2025-01-24T13:14:16.595Z"
+  },
+  {
+    "id": 2,
+    "url": "https://www.youtube.com/",
+    "shortCode": "youtube",
+    "createdAt": "2025-01-24T13:16:29.389Z",
+    "updatedAt": "2025-01-24T13:16:29.389Z"
+  }
+]
