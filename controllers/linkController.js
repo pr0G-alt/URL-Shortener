@@ -21,7 +21,9 @@ exports.getAllLinks = (req, res) => {
 };
 
 exports.getLink = (req, res) => {
-  const link = links.find((link) => link.shortCode === req.params.shortCode);
+  const link = links.find(
+    (link) => link.shortCode === req.params.shortCode.toLowerCase()
+  );
 
   if (!link) {
     return resError(
@@ -55,6 +57,10 @@ exports.goToLink = (req, res) => {
   res.redirect(link.url);
 };
 
+const validShortCode = (shortCode) => {
+  return /[^a-z0-9\s-]/gi.test(shortCode);
+};
+
 const shortCodeExists = (shortCode) => {
   return links.map((link) => link.shortCode).includes(shortCode);
 };
@@ -80,7 +86,7 @@ exports.shortenLink = (req, res) => {
 
   shortCode = shortCode.toLowerCase().replace(/\s+/g, '-');
 
-  if (/[^a-z0-9\s-]/gi.test(shortCode)) {
+  if (validShortCode(shortCode)) {
     return resError('Short code contains invalid characters.', 400, res);
   }
 
@@ -88,13 +94,13 @@ exports.shortenLink = (req, res) => {
     return resError('Short code already exists.', 400, res);
   }
 
-  if (!validURL(req.body.url)) {
+  let url = req.body.url;
+  if (!validURL(url)) {
     return resError('URL is not valid.', 400, res);
   }
 
-  let url = req.body.url;
-  if (!/^https?:\/\//i.test(req.body.url)) {
-    url = `https://${req.body.url}`;
+  if (!/^https?:\/\//i.test(url)) {
+    url = `https://${url}`;
   }
 
   const newLink = {
@@ -115,9 +121,63 @@ exports.shortenLink = (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({
-      status: 'fail',
-      message: 'Something went wrong.',
+    resError('Something went wrong.', 500, res);
+  }
+};
+
+exports.updateLink = (req, res) => {
+  const link = links.find(
+    (link) => link.shortCode === req.params.shortCode.toLowerCase()
+  );
+
+  if (!link) {
+    return resError(
+      `Link with short code "${req.params.shortCode}" does not exist.`,
+      404,
+      res
+    );
+  }
+
+  const linkIdx = links.indexOf(link);
+
+  if (req.body.shortCode) {
+    let shortCode = req.body.shortCode;
+    shortCode = shortCode.toLowerCase().replace(/\s+/g, '-');
+
+    if (validShortCode(shortCode)) {
+      return resError('Short code contains invalid characters.', 400, res);
+    }
+
+    if (shortCodeExists(shortCode)) {
+      return resError('Short code already exists.', 400, res);
+    }
+
+    links[linkIdx].shortCode = shortCode;
+  }
+
+  if (req.body.url) {
+    let url = req.body.url;
+    if (!validURL(url)) {
+      return resError('URL is not valid.', 400, res);
+    }
+
+    links[linkIdx].url = url;
+    if (!/^https?:\/\//i.test(url)) {
+      links[linkIdx].url = `https://${url}`;
+    }
+  }
+
+  links[linkIdx].updatedAt = new Date();
+
+  try {
+    fs.writeFileSync(`${__dirname}/../data/data.json`, JSON.stringify(links));
+    res.status(201).json({
+      status: 'success',
+      data: {
+        link: links[linkIdx],
+      },
     });
+  } catch (err) {
+    resError('Something went wrong.', 500, res);
   }
 };
