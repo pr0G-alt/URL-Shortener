@@ -1,0 +1,15 @@
+{
+  "name": "url-shortener",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Youssef Tawakal",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
