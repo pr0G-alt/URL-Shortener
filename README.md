@@ -15,7 +15,7 @@ A simple URL shortener application built with Node.js, Express, and a JSON-based
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/pr0G-alt/URL-Shortener.git
+   git clone https://github.com/yousseftawakal/URL-Shortener.git
    cd URL-Shortener
    ```
 
@@ -161,5 +161,5 @@ All shortened links are stored in a JSON file (`data.json`) located in the `data
 If you have any questions, suggestions, or issues, feel free to reach out:
 
 - **Email**: pr0.G@outlook.com
-- **GitHub**: [pr0G-alt](https://github.com/pr0G-alt)
+- **GitHub**: [pr0G-alt](https://github.com/yousseftawakal)
 - **LinkedIn**: [Youssef Tawakal](https://www.linkedin.com/in/yousseftawakal/)
